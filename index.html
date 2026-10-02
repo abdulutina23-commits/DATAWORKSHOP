@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulir Pengumpulan Tugas Media - Madrasah</title>
+    
+    <!-- Load Google Fonts: 'Playfair Display' untuk kesan elegan pada judul, 'Inter' untuk form yang mudah dibaca -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+    
+    <!-- Load FontAwesome untuk icon -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Load Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        emerald: {
+                            950: '#022c22', // Very dark background
+                            900: '#064e3b', // Card background
+                            800: '#065f46', // Input background
+                        },
+                        gold: {
+                            300: '#fde047',
+                            400: '#facc15',
+                            500: '#eab308', // Classic gold
+                            600: '#ca8a04',
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        serif: ['Playfair Display', 'serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* Custom scrollbar for a polished look */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #022c22; 
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #ca8a04; 
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #eab308; 
+        }
+
+        /* Input auto-fill styling for webkit to maintain dark theme */
+        input:-webkit-autofill,
+        input:-webkit-autofill:hover, 
+        input:-webkit-autofill:focus, 
+        input:-webkit-autofill:active{
+            -webkit-box-shadow: 0 0 0 30px #065f46 inset !important;
+            -webkit-text-fill-color: white !important;
+            transition: background-color 5000s ease-in-out 0s;
+        }
+        
+        /* Modal Animation */
+        .modal-enter {
+            opacity: 0;
+            transform: scale(0.9);
+        }
+        .modal-enter-active {
+            opacity: 1;
+            transform: scale(1);
+            transition: opacity 300ms, transform 300ms;
+        }
+        .modal-exit {
+            opacity: 1;
+            transform: scale(1);
+        }
+        .modal-exit-active {
+            opacity: 0;
+            transform: scale(0.9);
+            transition: opacity 300ms, transform 300ms;
+        }
+    </style>
+</head>
+
+<body class="bg-emerald-950 text-gray-100 font-sans antialiased min-h-screen flex items-center justify-center p-4 sm:p-8 relative overflow-x-hidden">
+
+    <!-- Decorative Background Elements (Subtle glows) -->
+    <div class="fixed top-[-10%] left-[-10%] w-96 h-96 bg-emerald-800 rounded-full mix-blend-screen filter blur-[100px] opacity-30 pointer-events-none"></div>
+    <div class="fixed bottom-[-10%] right-[-10%] w-96 h-96 bg-gold-600 rounded-full mix-blend-screen filter blur-[120px] opacity-20 pointer-events-none"></div>
+
+    <!-- Main Form Container -->
+    <div class="w-full max-w-4xl bg-emerald-900 bg-opacity-80 backdrop-blur-md rounded-2xl shadow-2xl border border-gold-600/30 overflow-hidden relative z-10">
+        
+        <!-- Header Section -->
+        <div class="bg-gradient-to-r from-emerald-950 via-emerald-900 to-emerald-950 border-b border-gold-600/30 p-8 text-center relative">
+            <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-gold-600 via-gold-400 to-gold-600"></div>
+            <i class="fa-solid fa-graduation-cap text-4xl text-gold-400 mb-4 drop-shadow-[0_0_10px_rgba(250,204,21,0.4)]"></i>
+            <h1 class="font-serif text-3xl md:text-4xl text-gold-400 font-bold mb-2 tracking-wide">Pengumpulan Data Media</h1>
+            <p class="text-emerald-100/70 text-sm md:text-base font-light max-w-xl mx-auto">
+                Lengkapi formulir di bawah ini untuk mengirimkan tugas akhir pembuatan media pembelajaran Madrasah Anda.
+            </p>
+        </div>
+
+        <!-- Form Body -->
+        <form id="submissionForm" class="p-8" onsubmit="handleFormSubmit(event)">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                
+                <!-- Nama Lengkap -->
+                <div class="flex flex-col space-y-2">
+                    <label for="nama" class="text-sm font-medium text-gold-300">Nama Lengkap & Gelar <span class="text-red-400">*</span></label>
+                    <div class="relative">
+                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                            <i class="fa-solid fa-user text-emerald-400/70"></i>
+                        </div>
+                        <input type="text" id="nama" name="nama" required placeholder="Contoh: Ahmad Fadil, S.Pd., M.Pd."
+                            class="w-full pl-10 pr-4 py-3 bg-emerald-800 border border-emerald-700 rounded-lg text-white placeholder-emerald-400/50 focus:outline-none focus:border-gold-400 focus:ring-1 focus:ring-gold-400 transition duration-200">
+                    </div>
+                </div>
+
+                <!-- Guru Mata Pelajaran -->
+                <div class="flex flex-col space-y-2">
+                    <label for="mapel" class="text-sm font-medium text-gold-300">Guru Mata Pelajaran <span class="text-red-400">*</span></label>
+                    <div class="relative">
+                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                            <i class="fa-solid fa-book-open text-emerald-400/70"></i>
+                        </div>
+                        <input type="text" id="mapel" name="mapel" required placeholder="Contoh: Fiqih / Matematika"
+                            class="w-full pl-10 pr-4 py-3 bg-emerald-800 border border-emerald-700 rounded-lg text-white placeholder-emerald-400/50 focus:outline-none focus:border-gold-400 focus:ring-1 focus:ring-gold-400 transition duration-200">
+                    </div>
+                </div>
+
+                <!-- Judul Media -->
+                <div class="flex flex-col space-y-2 md:col-span-2">
+                    <label for="judul" class="text-sm font-medium text-gold-300">Judul Media Pembelajaran <span class="text-red-400">*</span></label>
+                    <div class="relative">
+                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                            <i class="fa-solid fa-photo-film text-emerald-400/70"></i>
+                        </div>
+                        <input type="text" id="judul" name="judul" required placeholder="Masukkan judul aplikasi/media pembelajaran Anda"
+                            class="w-full pl-10 pr-4 py-3 bg-emerald-800 border border-emerald-700 rounded-lg text-white placeholder-emerald-400/50 focus:outline-none focus:border-gold-400 focus:ring-1 focus:ring-gold-400 transition duration-200">
+                    </div>
+                </div>
+
+                <!-- Asal Madrasah -->
+                <div class="flex flex-col space-y-2">
+                    <label for="madrasah" class="text-sm font-medium text-gold-300">Asal Madrasah <span class="text-red-400">*</span></label>
+                    <div class="relative">
+                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                            <i class="fa-solid fa-school text-emerald-400/70"></i>
+                        </div>
+                        <input type="text" id="madrasah" name="madrasah" required placeholder="Contoh: MAN 1 Kota Bogor"
+                            class="w-full pl-10 pr-4 py-3 bg-emerald-800 border border-emerald-700 rounded-lg text-white placeholder-emerald-400/50 focus:outline-none focus:border-gold-400 focus:ring-1 focus:ring-gold-400 transition duration-200">
+                    </div>
+                </div>
+
+                <!-- Fase Apa -->
+                <div class="flex flex-col space-y-2">
+                    <label for="fase" class="text-sm font-medium text-gold-300">Fase Pembelajaran <span class="text-red-400">*</span></label>
+                    <div class="relative">
+                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                            <i class="fa-solid fa-stairs text-emerald-400/70"></i>
+                        </div>
+                        <!-- Style select dropdown chevron using appearance-none and a custom icon for better cross-browser look in dark mode -->
+                        <select id="fase" name="fase" required
+                            class="w-full pl-10 pr-10 py-3 bg-emerald-800 border border-emerald-700 rounded-lg text-white focus:outline-none focus:border-gold-400 focus:ring-1 focus:ring-gold-400 transition duration-200 appearance-none cursor-pointer">
+                            <option value="" disabled selected class="text-gray-400">Pilih Fase...</option>
+                            <option value="Fase A" class="bg-emerald-900 text-white">Fase A (Kelas 1 - 2)</option>
+                            <option value="Fase B" class="bg-emerald-900 text-white">Fase B (Kelas 3 - 4)</option>
+                            <option value="Fase C" class="bg-emerald-900 text-white">Fase C (Kelas 5 - 6)</option>
+                            <option value="Fase D" class="bg-emerald-900 text-white">Fase D (Kelas 7 - 9)</option>
+                            <option value="Fase E" class="bg-emerald-900 text-white">Fase E (Kelas 10)</option>
+                            <option value="Fase F" class="bg-emerald-900 text-white">Fase F (Kelas 11 - 12)</option>
+                        </select>
+                        <div class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
+                            <i class="fa-solid fa-chevron-down text-emerald-400/70"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Link Github -->
+                <div class="flex flex-col space-y-2 md:col-span-2 mt-2">
+                    <div class="w-full h-px bg-emerald-700/50 mb-2"></div>
+                    <label for="github" class="text-sm font-medium text-gold-300">Link Repository/Pages Github <span class="text-red-400">*</span></label>
+                    <div class="relative">
+                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                            <i class="fa-brands fa-github text-emerald-400/70"></i>
+                        </div>
+                        <input type="url" id="github" name="github" required placeholder="https://github.com/username/repo-media"
+                            class="w-full pl-10 pr-4 py-3 bg-emerald-800 border border-emerald-700 rounded-lg text-white placeholder-emerald-400/50 focus:outline-none focus:border-gold-400 focus:ring-1 focus:ring-gold-400 transition duration-200">
+                    </div>
+                </div>
+
+                <!-- Link Spreadsheet -->
+                <div class="flex flex-col space-y-2 md:col-span-2">
+                    <label for="spreadsheet" class="text-sm font-medium text-gold-300">Link Google Spreadsheet <span class="text-red-400">*</span></label>
+                    <div class="relative">
+                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                            <i class="fa-solid fa-file-excel text-emerald-400/70"></i>
+                        </div>
+                        <input type="url" id="spreadsheet" name="spreadsheet" required placeholder="https://docs.google.com/spreadsheets/d/..."
+                            class="w-full pl-10 pr-4 py-3 bg-emerald-800 border border-emerald-700 rounded-lg text-white placeholder-emerald-400/50 focus:outline-none focus:border-gold-400 focus:ring-1 focus:ring-gold-400 transition duration-200">
+                    </div>
+                    <p class="text-xs text-emerald-300/60 mt-1"><i class="fa-solid fa-circle-info mr-1"></i> Pastikan akses link Spreadsheet sudah di-set ke "Anyone with the link can view".</p>
+                </div>
+            </div>
+
+            <!-- Submit Button -->
+            <div class="mt-8">
+                <button type="submit" id="submitBtn"
+                    class="w-full bg-gradient-to-r from-gold-600 to-gold-400 hover:from-gold-500 hover:to-gold-300 text-emerald-950 font-bold py-4 px-6 rounded-lg shadow-[0_0_15px_rgba(250,204,21,0.3)] hover:shadow-[0_0_25px_rgba(250,204,21,0.5)] transform hover:-translate-y-1 transition-all duration-300 flex items-center justify-center group">
+                    <span id="btnText">Kirim Data Media</span>
+                    <i class="fa-solid fa-paper-plane ml-2 transform group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform duration-300"></i>
+                    
+                    <!-- Loading Spinner (Hidden by default) -->
+                    <i id="btnSpinner" class="fa-solid fa-circle-notch fa-spin ml-2 hidden"></i>
+                </button>
+            </div>
+            
+        </form>
+    </div>
+
+    <!-- Success Modal Overlay -->
+    <div id="successModal" class="fixed inset-0 bg-emerald-950/80 backdrop-blur-sm z-50 flex items-center justify-center hidden opacity-0 transition-opacity duration-300">
+        <!-- Modal Content -->
+        <div id="modalContent" class="bg-emerald-900 border border-gold-500/50 p-8 rounded-2xl shadow-2xl max-w-md w-full mx-4 transform scale-95 transition-transform duration-300 text-center relative overflow-hidden">
+            <!-- Decorative Modal background -->
+            <div class="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-gold-600 via-gold-400 to-gold-600"></div>
+            
+            <div class="w-20 h-20 bg-emerald-800 rounded-full flex items-center justify-center mx-auto mb-6 border-4 border-gold-400/30">
+                <i class="fa-solid fa-check text-4xl text-gold-400"></i>
+            </div>
+            
+            <h3 class="font-serif text-2xl text-gold-400 font-bold mb-2">Alhamdulillah!</h3>
+            <p class="text-emerald-50 mb-6 font-light">Data Media Pembelajaran atas nama <strong id="modalName" class="text-gold-300 font-semibold"></strong> berhasil dikirim dan tersimpan di sistem.</p>
+            
+            <button type="button" onclick="closeModal()" 
+                class="w-full bg-emerald-800 hover:bg-emerald-700 text-gold-300 border border-gold-600/50 font-medium py-3 px-4 rounded-lg transition-colors duration-200">
+                Tutup & Kembali
+            </button>
+        </div>
+    </div>
+
+    <script>
+        /**
+         * Handle form submission, simulate API call, and show success modal
+         */
+        function handleFormSubmit(event) {
+            event.preventDefault(); // Prevent page reload
+            
+            // Get form elements
+            const form = document.getElementById('submissionForm');
+            const submitBtn = document.getElementById('submitBtn');
+            const btnText = document.getElementById('btnText');
+            const btnSpinner = document.getElementById('btnSpinner');
+            const paperPlaneIcon = submitBtn.querySelector('.fa-paper-plane');
+            
+            // Get value for personalization in modal
+            const namaLengkap = document.getElementById('nama').value;
+            
+            // Change button state to loading
+            submitBtn.disabled = true;
+            submitBtn.classList.add('opacity-80', 'cursor-not-allowed');
+            btnText.innerText = "Mengirim...";
+            paperPlaneIcon.classList.add('hidden');
+            btnSpinner.classList.remove('hidden');
+
+            // ⚠️ GANTI URL DI BAWAH INI DENGAN URL WEB APP GOOGLE APPS SCRIPT ANDA
+            const scriptURL = 'https://script.google.com/macros/s/AKfycbxMt_1kg21kKhFsLNR3hEhvU8rB8msHjS_AZ_5iLEJNqfZUrk3zkXN-gCxc0ceYq39L1Q/exec';
+            
+            if (scriptURL === 'MASUKKAN_URL_WEB_APP_APPS_SCRIPT_DI_SINI') {
+                // Jika URL belum diganti, jalankan simulasi agar form/preview tetap berjalan
+                console.warn("URL Google Apps Script belum diatur. Menjalankan simulasi pengiriman.");
+                setTimeout(() => {
+                    resetButtonAndShowModal(submitBtn, btnText, paperPlaneIcon, btnSpinner, namaLengkap, form);
+                }, 1500);
+            } else {
+                // Kirim data ke Google Sheets menggunakan Fetch API
+                fetch(scriptURL, { method: 'POST', body: new FormData(form) })
+                    .then(response => {
+                        console.log('Success!', response);
+                        resetButtonAndShowModal(submitBtn, btnText, paperPlaneIcon, btnSpinner, namaLengkap, form);
+                    })
+                    .catch(error => {
+                        console.error('Error!', error.message);
+                        // Tampilkan pesan error kustom (bisa dikembangkan menggunakan modal khusus error nanti)
+                        alert("Terjadi kesalahan saat mengirim data. Pastikan koneksi internet stabil atau cek konfigurasi link.");
+                        
+                        // Reset form button on error
+                        submitBtn.disabled = false;
+                        submitBtn.classList.remove('opacity-80', 'cursor-not-allowed');
+                        btnText.innerText = "Kirim Data Media";
+                        paperPlaneIcon.classList.remove('hidden');
+                        btnSpinner.classList.add('hidden');
+                    });
+            }
+        }
+
+        /**
+         * Helper function to reset button state and show modal success
+         */
+        function resetButtonAndShowModal(submitBtn, btnText, paperPlaneIcon, btnSpinner, namaLengkap, form) {
+            // Reset button state
+            submitBtn.disabled = false;
+            submitBtn.classList.remove('opacity-80', 'cursor-not-allowed');
+            btnText.innerText = "Kirim Data Media";
+            paperPlaneIcon.classList.remove('hidden');
+            btnSpinner.classList.add('hidden');
+            
+            // Show Success Modal
+            showModal(namaLengkap);
+            
+            // Reset Form
+            form.reset();
+        }
+
+        /**
+         * Show custom modal with animation
+         */
+        function showModal(nama) {
+            const modal = document.getElementById('successModal');
+            const modalContent = document.getElementById('modalContent');
+            const modalName = document.getElementById('modalName');
+            
+            modalName.innerText = nama;
+            
+            // Make block first, then trigger opacity for transition
+            modal.classList.remove('hidden');
+            
+            // Trigger reflow
+            void modal.offsetWidth;
+            
+            // Add animation classes
+            modal.classList.remove('opacity-0');
+            modalContent.classList.remove('scale-95');
+            modalContent.classList.add('scale-100');
+        }
+
+        /**
+         * Close custom modal with animation
+         */
+        function closeModal() {
+            const modal = document.getElementById('successModal');
+            const modalContent = document.getElementById('modalContent');
+            
+            // Remove animation classes
+            modal.classList.add('opacity-0');
+            modalContent.classList.remove('scale-100');
+            modalContent.classList.add('scale-95');
+            
+            // Hide element after transition completes
+            setTimeout(() => {
+                modal.classList.add('hidden');
+            }, 300);
+        }
+
+        /* Close modal if user clicks outside the modal content */
+        document.getElementById('successModal').addEventListener('click', function(event) {
+            if (event.target === this) {
+                closeModal();
+            }
+        });
+    </script>
+</body>
+</html>
